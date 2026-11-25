@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Murukku Works · Console</title>
+<style>
+:root{--bg:#f4f1ff;--fg:#1d1b3a;--card:#fff;--line:#e4dffa;--ac:#7c3aed;--ac2:#fff;--bad:#e11d48;--ok:#059669;--mut:#6b6893}
+@media(prefers-color-scheme:dark){:root{--bg:#120f26;--fg:#efeaff;--card:#1c1838;--line:#332d5e;--ac:#a78bfa;--ac2:#1a1038;--bad:#fb7185;--ok:#34d399;--mut:#a39fcf}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 'Trebuchet MS',system-ui,sans-serif}
+#app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+aside{background:linear-gradient(170deg,#4f46e5,#9333ea 55%,#ec4899);color:#fff;padding:18px 14px;display:flex;flex-direction:column;gap:14px;position:sticky;top:0;height:100vh}
+.brand{font-size:19px;font-weight:800}.brand small{display:block;font-weight:400;opacity:.8;font-size:12px}
+aside label{font-size:12px;display:block}aside select{width:100%;margin-top:4px;background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.4)}aside option{color:#000}
+nav{display:flex;flex-direction:column;gap:5px;flex:1}
+nav button{background:rgba(255,255,255,.12);color:#fff;text-align:left;border-radius:12px;padding:10px 12px;border:0;transition:.15s}
+nav button:hover{transform:translateX(5px);background:rgba(255,255,255,.28)}nav button:not(.alt){background:#fff;color:#6d28d9;font-weight:800}
+.play{background:linear-gradient(90deg,#fde047,#fb923c)!important;color:#431407!important;font-weight:800;animation:pulse 2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(253,224,71,.3)}}
+.reset{background:transparent!important;border:1px solid rgba(255,255,255,.5)!important;color:#fff!important}
+button,select,input{font:inherit;color:inherit}
+button{background:linear-gradient(90deg,var(--ac),#ec4899);color:#fff;border:0;padding:8px 16px;border-radius:999px;cursor:pointer;font-weight:700;transition:transform .12s,box-shadow .12s}
+button:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(124,58,237,.35)}button:active{transform:scale(.95)}
+button.alt{background:transparent;color:var(--fg);border:2px solid var(--line)}
+select,input{background:var(--card);border:2px solid var(--line);padding:7px 10px;border-radius:10px;max-width:100%}
+input:focus,select:focus{outline:0;border-color:var(--ac)}
+main{padding:20px 26px 70px;max-width:1150px;width:100%}main>*{animation:in .3s ease}@keyframes in{from{opacity:0;transform:translateY(10px)}}
+h2{font-size:21px;margin:22px 0 10px;font-weight:800;color:var(--ac)}h2:first-child{margin-top:0}
+.card{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px 16px;margin:10px 0;transition:.15s}.card:hover{border-color:var(--ac)}
+.tw{overflow-x:auto;background:var(--card);border:2px solid var(--line);border-radius:14px}.card .tw{border:0}
+table{border-collapse:collapse;width:100%}th{background:linear-gradient(90deg,#7c3aed22,#ec489922);font-size:12.5px}
+th,td{border-bottom:1px solid var(--line);padding:8px 12px;text-align:left;white-space:nowrap}tr:hover td{background:#7c3aed12}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.bad{color:var(--bad);font-weight:800}.ok{color:var(--ok);font-weight:700}.mut{color:var(--mut)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.kpi .card{margin:0;color:#fff;border:0}.kpi b{display:block;font-size:28px}
+.kpi .card:nth-child(1){background:linear-gradient(135deg,#f59e0b,#ef4444)}.kpi .card:nth-child(2){background:linear-gradient(135deg,#10b981,#06b6d4)}
+.kpi .card:nth-child(3){background:linear-gradient(135deg,#8b5cf6,#ec4899)}.kpi .card:nth-child(4){background:linear-gradient(135deg,#3b82f6,#6366f1)}
+.kpi .card:hover{transform:scale(1.04) rotate(-1deg)}
+.pill{display:inline-block;padding:2px 11px;border-radius:999px;color:#fff;font-size:12px;font-weight:700;margin:2px}
+.s-Submitted{background:#f59e0b}.s-Approved{background:#3b82f6}.s-Invoiced{background:#8b5cf6}.s-Dispatched{background:#10b981}.s-Rejected{background:#ef4444}
+.g{display:grid;grid-template-columns:140px 1fr 90px;gap:10px;align-items:center;margin:8px 0}.g .n{text-align:right}
+.gb{height:14px;border-radius:99px;background:var(--line);overflow:hidden}.gb div{height:100%;border-radius:99px;transition:width .8s}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 14px}.ar{font-size:20px;color:var(--ac);animation:nudge 1s infinite}@keyframes nudge{50%{transform:translateX(5px)}}
+.fc{color:#fff;border-radius:14px;padding:8px 16px;text-align:center;min-width:100px;transition:.15s}.fc:hover{transform:translateY(-4px) scale(1.06)}.fc b{display:block;font-size:22px}.fc span{font-size:12px}
+.c1{background:#f59e0b}.c2{background:#3b82f6}.c3{background:#10b981}.c4{background:#ec4899}.c5{background:#8b5cf6}.c6{background:#06b6d4}.c7{background:#ef4444}
+#steps{display:none;flex-wrap:wrap;gap:6px;margin-bottom:12px}.st{padding:4px 12px;border-radius:99px;background:var(--line);font-size:12px}.st.done{background:var(--ok);color:#fff}.st.now{background:#f59e0b;color:#fff;font-weight:800;transform:scale(1.1)}
+#toast{position:fixed;right:16px;top:16px;z-index:20;display:flex;flex-direction:column;gap:8px}
+.toast{background:#312e81;color:#fff;padding:10px 16px;border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,.3);animation:slide .3s}.toast.good{background:#059669}.toast.bad{background:#e11d48}.toast.out{opacity:0;transition:.4s}
+@keyframes slide{from{transform:translateX(120%)}}
+.cf{position:fixed;bottom:20%;z-index:30;font-style:normal;font-size:22px;pointer-events:none;animation:fly 1.4s ease-out forwards}@keyframes fly{to{transform:translate(var(--dx),-60vh) rotate(540deg);opacity:0}}
+#inv{display:none}@media print{body>*:not(#inv){display:none!important}#inv{display:block!important;color:#000;background:#fff;padding:20px}#inv table{border:1px solid #000}}
+@media(max-width:760px){#app{display:block}aside{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:10px 12px}.brand small,aside .reset{display:none}aside label{flex:1}
+nav{position:fixed;bottom:0;left:0;right:0;flex-direction:row;background:#4f46e5;padding:6px;gap:4px;overflow-x:auto;z-index:5;flex:none}nav button{flex:1;text-align:center;white-space:nowrap}main{padding:14px 12px 90px}.g{grid-template-columns:100px 1fr 70px}}
+</style></head><body>
+<div id="app"><aside><div class="brand">Murukku Works<small>Order to audit</small></div>
+<label>Signed in as<select id="usr" onchange="login(this.value)"></select></label>
+<nav id="nav"></nav>
+<button class="play" onclick="play()">▶ Play benchmark</button><button class="reset" onclick="if(confirm('Reset to benchmark seed data?')){seed();render()}">Reset seed data</button></aside><main><div id="steps"></div><div id="main"></div></main></div><div id="toast"></div><div id="inv"></div>
+<script>
+// ---------- Money = integer paisa; quantity = integer base units (g, ml, pc) ----------
+const FAC={kg:1000,L:1000,pc:1,pkt:1}, TOL=3, SELLER={name:'Murukku Works',gstin:'33AAAAA0000A1Z5',state:'Tamil Nadu',code:'33'};
+const USERS={salA:['Salesman A','sal'],salB:['Salesman B','sal'],admin:['Factory Admin','admin'],prod:['Production Supervisor','prod'],acct:['Accountant (read-only)','acct'],owner:['Owner','owner']};
+const PAGES={sal:['order','myorders'],admin:['orders','invoices','stock','reports'],prod:['purchase','run','stock'],acct:['reports','stock'],owner:['dash','stock','reports']};
+const LABEL={order:'🛒 New order',myorders:'📋 My orders',orders:'📥 Orders',invoices:'🧾 Invoices & pay',stock:'📦 Stock',reports:'📊 Reports',purchase:'🌾 Purchase',run:'🏭 Production',dash:'🏠 Dashboard'};
+let S,me='admin',page='dash';
+const $=id=>document.getElementById(id);
+const rs=p=>'₹'+(p/100).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const now=()=>new Date().toISOString().slice(0,16).replace('T',' ');
+const dq=(id,q)=>+(q/FAC[S.items[id].u]).toFixed(3); // display qty
+const bq=(id,v)=>Math.round(+v*FAC[S.items[id].u]);   // to base units
+const bal=id=>S.ledger.reduce((a,l)=>l.item==id?a+l.q:a,0);
+const log=(m)=>{S.audit.push({t:now(),u:me,m});toast(m,/Dispatched|posted|Payment|Invoice/.test(m)?'good':'');if(/Dispatched|posted|Payment/.test(m))burst()};
+function save(){try{localStorage.setItem('o2a',JSON.stringify(S))}catch(e){}}
+function seed(){
+ S={seq:{inv:0,ord:0,run:0},ledger:[],audit:[],orders:[],invoices:[],payments:[],purchases:[],runs:[],
+ items:{flour:{n:'Flour',t:'Raw',u:'kg',val:0},oil:{n:'Cooking oil',t:'Raw',u:'L',val:0},spice:{n:'Salt & spice mix',t:'Raw',u:'kg',val:0},
+  pouch:{n:'200 g pouch',t:'Packaging',u:'pc',val:0},carton:{n:'Carton (20 pkts)',t:'Packaging',u:'pc',val:0},murukku:{n:'Murukku 200 g',t:'FG',u:'pkt',val:0,price:5000,hsn:'1905',gst:5}},
+ bom:{murukku:{yield:200,lines:[['flour',40000],['oil',10000],['spice',1200],['pouch',200],['carton',10]]}},
+ cust:{A:{n:'Retailer A',st:'Tamil Nadu',code:'33',gstin:'33BBBBB1111B1Z5'},B:{n:'Distributor B',st:'Karnataka',code:'29',gstin:'29CCCCC2222C1Z5'}}};
+ const op=(i,q,rate)=>post(i,q,'OPENING','Opening balance',Math.round(q*rate/FAC[S.items[i].u]));
+ op('flour',100000,4200);op('oil',30000,14000);op('spice',5000,20000);op('pouch',500,250);op('carton',30,1500);op('murukku',50,3000);
+ save();}
+// ---------- Ledger: balance is always derived from movements; issues valued at weighted average ----------
+function post(item,q,src,ref,val){const it=S.items[item];
+ if(q<0){const b=bal(item);if(-q>b)throw new Error('Insufficient '+it.n+': have '+dq(item,b)+' '+it.u);val=-Math.round(it.val*(-q)/b)}
+ it.val+=val;S.ledger.push({n:S.ledger.length+1,ts:now(),item,q,v:val,src,ref,by:me});return Math.abs(val)}
+function fy(){const d=new Date();const y=d.getMonth()>=3?d.getFullYear():d.getFullYear()-1;return y+'-'+String(y+1).slice(2)}
+// ---------- Actions ----------
+let cart=[];
+function addLine(){const p=$('op').value,q=+$('oq').value,c=$('oc').value;if(q>0){cart.push({p,q});render();$('oc').value=c}}
+function submitOrder(){if(!cart.length)return alert('Add a product');
+ S.orders.push({id:'ORD-'+(++S.seq.ord),cust:$('oc').value,by:me,lines:cart.map(l=>({p:l.p,q:l.q,price:S.items[l.p].price})),st:'Submitted',ts:now()});
+ cart=[];log('Order submitted');save();page='myorders';render()}
+function stockCheck(o){return o.lines.map(l=>{const b=bal(l.p),n=bq(l.p,l.q);return{p:l.p,need:l.q,have:dq(l.p,b),short:Math.max(0,n-b)/FAC[S.items[l.p].u]}})}
+function editQty(id,i,v){const o=S.orders.find(x=>x.id==id);o.lines[i].q=+v;log(id+' qty edited');save();render()}
+function approve(id){const o=S.orders.find(x=>x.id==id);o.st='Approved';log(id+' approved');save();render()}
+function reject(id){S.orders.find(x=>x.id==id).st='Rejected';log(id+' rejected');save();render()}
+function invoice(id){const o=S.orders.find(x=>x.id==id),c=S.cust[o.cust],intra=c.code==SELLER.code;
+ const lines=o.lines.map(l=>{const it=S.items[l.p],tv=Math.round(l.q*l.price),t=Math.round(tv*it.gst/100);
+  return{p:l.p,q:l.q,price:l.price,hsn:it.hsn,rate:it.gst,tv,cgst:intra?Math.round(tv*it.gst/200):0,sgst:intra?Math.round(tv*it.gst/200):0,igst:intra?0:t}});
+ const tot=k=>lines.reduce((a,l)=>a+l[k],0),tv=tot('tv'),tax=tot('cgst')+tot('sgst')+tot('igst');
+ S.invoices.push({no:'INV/'+fy()+'/'+String(++S.seq.inv).padStart(4,'0'),ord:id,cust:o.cust,ts:now(),lines,tv,cgst:tot('cgst'),sgst:tot('sgst'),igst:tot('igst'),total:tv+tax,disp:false,status:'Posted'});
+ o.st='Invoiced';log('Invoice raised for '+id);save();render()}
+function dispatch(no){const v=S.invoices.find(x=>x.no==no);
+ try{v.lines.forEach(l=>post(l.p,-bq(l.p,l.q),'INVOICE',v.no));}catch(e){return alert(e.message+'\nDispatch blocked: shortage.')}
+ v.disp=true;S.orders.find(o=>o.id==v.ord).st='Dispatched';log('Dispatched '+no);save();render()}
+function pay(no){const a=Math.round(+$('pa'+no.replace(/\W/g,'')).value*100);if(a>0){S.payments.push({inv:no,cust:S.invoices.find(x=>x.no==no).cust,amt:a,ts:now()});log('Payment '+rs(a)+' on '+no);save();render()}}
+function buy(){const i=$('pi').value,q=bq(i,$('pq').value),r=Math.round(+$('pr').value*100);if(q<=0)return;
+ S.purchases.push({id:'PUR-'+(S.purchases.length+1),sup:$('ps').value,item:i,q,rate:r,ts:now()});
+ post(i,q,'PURCHASE','PUR-'+S.purchases.length,Math.round(q*r/FAC[S.items[i].u]));save();render()}
+function runProd(){const p='murukku',B=S.bom[p],good=+$('good').value,dmg=+$('dmg').value,id='RUN-'+(S.seq.run+1);
+ const lines=B.lines.map(([i,std])=>({item:i,std,act:i=='pouch'?good+dmg:bq(i,$('r_'+i).value)}));
+ try{let mat=0;lines.forEach(l=>mat+=post(l.item,-l.act,'PRODUCTION',id));
+  post(p,good,'PRODUCTION',id,mat);S.seq.run++;S.runs.push({id,p,exp:B.yield,good,dmg,lines,mat,lab:0,pow:0,ts:now()});log(id+' posted');save();render()}
+ catch(e){alert(e.message+' (nothing posted)');load()}}
+function load(){try{S=JSON.parse(localStorage.getItem('o2a'))||S}catch(e){}render()}
+function ovh(id){const r=S.runs.find(x=>x.id==id);r.lab=Math.round(+$('lab'+id).value*100);r.pow=Math.round(+$('pow'+id).value*100);log(id+' overheads set');save();render()}
+function cpp(r){return Math.round((r.mat+r.lab+r.pow)/r.good)}
+const pct=(a,s)=>(a-s)/s*100, flag=p=>Math.abs(p)>TOL;
+function outstanding(c){return S.invoices.filter(v=>v.cust==c&&v.status=='Posted').reduce((a,v)=>a+v.total,0)-S.payments.filter(p=>p.cust==c).reduce((a,p)=>a+p.amt,0)}
+// ---------- Views ----------
+function table(h,rows,id){return '<div class="tw"><table><tr>'+h.map(x=>'<th'+(x[0]=='#'?' class="n">'+x.slice(1):'>'+x)+'</th>').join('')+'</tr>'+rows.map(r=>'<tr>'+r.map((c,i)=>'<td'+(h[i][0]=='#'?' class="n"':'')+'>'+c+'</td>').join('')+'</tr>').join('')+'</table></div>'}
+function csv(name,h,rows){const t=[h,...rows].map(r=>r.map(c=>'"'+String(c).replace(/<[^>]+>/g,'').replace(/"/g,'""')+'"').join(',')).join('\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download=name+'.csv';a.click()}
+const V={
+order(){const opts=Object.keys(S.cust).map(k=>`<option value="${k}">${S.cust[k].n}</option>`).join('');
+ return `<h2>New order</h2><div class="card"><div class="row"><select id="oc">${opts}</select></div>
+ <div class="row"><select id="op"><option value="murukku">Murukku 200 g – ${rs(5000)}</option></select><input id="oq" type="number" min="1" placeholder="Qty (packets)" style="width:130px"><button class="alt" onclick="$('oq').value=(+$('oq').value||0)+10">+10</button><button class="alt" onclick="$('oq').value=(+$('oq').value||0)+50">+50</button><button onclick="addLine()">Add ＋</button></div>
+ ${cart.map((l,i)=>`<span class="pill s-Approved" style="cursor:pointer" onclick="rmLine(${i})">${S.items[l.p].n} × ${l.q} ✕</span>`).join('')}<div class="row"><button onclick="submitOrder()">Submit order</button></div>
+ <p class="mut">${navigator.onLine?'Online':'Offline – use the PWA/service-worker queue in the full build'}</p></div>`},
+myorders(){const mine=S.orders.filter(o=>o.by==me);
+ const sales={};mine.forEach(o=>sales[o.cust]=(sales[o.cust]||0)+o.lines.reduce((a,l)=>a+l.q*l.price,0));
+ return `<h2>My orders</h2>`+table(['Order','Customer','Qty','Status'],mine.map(o=>[o.id,S.cust[o.cust].n,o.lines.map(l=>l.q).join(','),'<span class="pill s-'+o.st+'">'+o.st+'</span>']))+
+ `<h2>Customer-wise sales</h2>`+table(['Customer','#Value'],Object.keys(sales).map(c=>[S.cust[c].n,rs(sales[c])]))},
+orders(){return `<h2>Orders</h2>`+(S.orders.map(o=>{const c=S.cust[o.cust],chk=stockCheck(o),sh=chk.some(x=>x.short>0);
+ return `<div class="card"><b>${o.id}</b> · ${c.n} (${c.st}) · by ${USERS[o.by][0]} · <span class="pill s-${o.st}">${o.st}</span>
+ ${o.lines.map((l,i)=>`<div class="row">${S.items[l.p].n} × <input type="number" value="${l.q}" ${o.st!='Submitted'?'disabled':''} style="width:80px" onchange="editQty('${o.id}',${i},this.value)"> @ ${rs(l.price)}</div>`).join('')}
+ ${o.st=='Submitted'?chk.map(x=>x.short>0?`<div class="bad">Shortage: need ${x.need}, stock ${x.have} → short ${x.short} packets</div>`:`<div class="ok">Stock OK (${x.have} available)</div>`).join('')+
+ `<div class="row"><button onclick="approve('${o.id}')">Approve</button><button class="alt" onclick="reject('${o.id}')">Reject</button>${sh?'<span class="mut">Edit quantity or approve and dispatch after the next run.</span>':''}</div>`:''}
+ ${o.st=='Approved'?`<button onclick="invoice('${o.id}')">Raise GST invoice (${c.code==SELLER.code?'CGST+SGST':'IGST'})</button>`:''}</div>`}).join('')||'<p class="mut">No orders yet.</p>')},
+invoices(){return `<h2>Invoices</h2>`+(S.invoices.map(v=>{const k=v.no.replace(/\W/g,'');const paid=S.payments.filter(p=>p.inv==v.no).reduce((a,p)=>a+p.amt,0);
+ return `<div class="card"><b>${v.no}</b> · ${S.cust[v.cust].n} · ${rs(v.total)} (${v.igst?'IGST '+rs(v.igst):'CGST '+rs(v.cgst)+' + SGST '+rs(v.sgst)}) · paid ${rs(paid)}
+ <div class="row"><button class="alt" onclick="showInv('${v.no}')">View / print PDF</button>${v.disp?'<span class="ok">Dispatched</span>':`<button onclick="dispatch('${v.no}')">Record dispatch</button>`}
+ <input id="pa${k}" type="number" placeholder="Payment ₹" style="width:110px"><button onclick="pay('${v.no}')">Record payment</button></div></div>`}).join('')||'<p class="mut">None.</p>')+
+ `<h2>Outstanding by customer</h2>`+table(['Customer','#Outstanding'],Object.keys(S.cust).map(c=>[S.cust[c].n,rs(outstanding(c))]))},
+stock(){return `<h2>Stock summary</h2>`+table(['Item','Type','#Balance','Unit','#Value (WAC)'],Object.keys(S.items).map(i=>[S.items[i].n,S.items[i].t,dq(i,bal(i)),S.items[i].u,rs(S.items[i].val)]))+
+ `<h2>Stock ledger</h2>`+ledger()},
+purchase(){const raw=Object.keys(S.items).filter(i=>S.items[i].t!='FG');
+ return `<h2>Record purchase</h2><div class="card row"><select id="pi">${raw.map(i=>`<option value="${i}">${S.items[i].n} (${S.items[i].u})</option>`).join('')}</select>
+ <input id="pq" type="number" placeholder="Qty" style="width:90px"><input id="pr" type="number" placeholder="₹ per unit" style="width:100px"><input id="ps" placeholder="Supplier" value="Supplier 1" style="width:120px"><button onclick="buy()">Save purchase</button></div>`+
+ table(['Ref','Supplier','Item','#Qty','#Rate'],S.purchases.map(p=>[p.id,p.sup,S.items[p.item].n,dq(p.item,p.q),rs(p.rate)]))},
+run(){const B=S.bom.murukku;
+ return `<h2>Production run – Murukku 200 g (1 batch = ${B.yield} packets)</h2><div class="card">
+ <p class="mut">Enter actual raw material issued. Pouch consumption = good + damaged.</p>
+ ${B.lines.filter(l=>l[0]!='pouch').map(([i,s])=>`<div class="row"><label>${S.items[i].n} (${S.items[i].u}), std ${dq(i,s)} <input id="r_${i}" type="number" step="any" value="${dq(i,s)}" style="width:90px"></label></div>`).join('')}
+ <div class="row"><label>Good packets <input id="good" type="number" value="188" style="width:90px"></label><label>Damaged pouches <input id="dmg" type="number" value="6" style="width:70px"></label></div>
+ <button onclick="runProd()">Post run</button></div><h2>Runs</h2>`+S.runs.map(runCard).join('')},
+dash(){const low=Object.keys(S.items).filter(i=>S.items[i].t=='Raw'&&bal(i)<FAC[S.items[i].u]*5);
+ const out=Object.keys(S.cust).reduce((a,c)=>a+outstanding(c),0),alerts=S.runs.flatMap(r=>varRows(r).filter(x=>flag(x.p)).map(x=>r.id+': '+x.n+' '+x.p.toFixed(1)+'%'));
+ return `<h2>Owner dashboard</h2><div class="kpi">
+ <div class="card">Pending orders<b>${S.orders.filter(o=>o.st=='Submitted').length}</b></div>
+ <div class="card">Finished goods<b>${dq('murukku',bal('murukku'))} pkts</b></div>
+ <div class="card">Outstanding<b>${rs(out)}</b></div>
+ <div class="card">Cost / packet<b>${S.runs.length?rs(cpp(S.runs.at(-1))):'–'}</b></div></div>
+ <h2>Variance alerts</h2>${alerts.map(a=>`<div class="bad">${a}</div>`).join('')||'<p class="mut">None</p>'}
+ <h2>Low raw stock (&lt; 5 units)</h2>${low.map(i=>S.items[i].n).join(', ')||'<p class="mut">None</p>'}
+ <h2>Audit trail</h2>`+table(['Time','User','Action'],S.audit.slice(-8).reverse().map(a=>[a.t,a.u,a.m]))},
+reports(){const R=reports();return `<h2>Reports</h2><div class="row"><select id="rp" onchange="rpt=this.value;render()">${Object.keys(R).map(k=>`<option ${k==rpt?'selected':''}>${k}</option>`).join('')}</select>
+ <button onclick="csv(rpt,...reports()[rpt])">Export CSV</button><button class="alt" onclick="window.print()">Print / PDF</button></div>`+table(R[rpt][0],R[rpt][1])}};
+let rpt='Sales register';
+function ledger(){return table(['#','Time','Item','#Qty','Source','Ref'],S.ledger.map(l=>[l.n,l.ts,S.items[l.item].n,(l.q>0?'+':'')+dq(l.item,l.q)+' '+S.items[l.item].u,l.src,l.ref]).reverse())}
+function varRows(r){const rows=r.lines.map(l=>({n:S.items[l.item].n,std:dq(l.item,l.std),act:dq(l.item,l.act),p:pct(l.act,l.std)}));rows.push({n:'Yield (packets)',std:r.exp,act:r.good,p:pct(r.good,r.exp)});return rows}
+function runCard(r){return `<div class="card"><b>${r.id}</b> · expected ${r.exp}, good ${r.good}, wastage ${r.dmg} pouches
+ ${table(['Item','#Planned','#Actual','#Variance %'],varRows(r).map(x=>[x.n,x.std,x.act,`<span class="${flag(x.p)?'bad':''}">${x.p.toFixed(1)}%${flag(x.p)?' ⚑':''}</span>`]))}
+ <div class="row">Materials ${rs(r.mat)} · Labour <input id="lab${r.id}" type="number" value="${r.lab/100}" style="width:80px"> Gas/power <input id="pow${r.id}" type="number" value="${r.pow/100}" style="width:80px"><button onclick="ovh('${r.id}')">Save</button></div>
+ <b>Cost per packet ${rs(cpp(r))}</b> · margin vs ₹50: ${rs(5000-cpp(r))} (${((5000-cpp(r))/50).toFixed(1)}%)</div>`}
+function reports(){const inv=S.invoices.filter(v=>v.status=='Posted');return{
+ 'Sales register':[['Invoice','Date','Customer','GSTIN','Taxable','CGST','SGST','IGST','Total'],inv.map(v=>[v.no,v.ts,S.cust[v.cust].n,S.cust[v.cust].gstin,rs(v.tv),rs(v.cgst),rs(v.sgst),rs(v.igst),rs(v.total)])],
+ 'GST summary (GSTR-1 style)':[['Supply','HSN','Rate %','Taxable','CGST','SGST','IGST'],inv.flatMap(v=>v.lines.map(l=>[v.cust=='A'||S.cust[v.cust].code==SELLER.code?'Intra-state B2B':'Inter-state B2B',l.hsn,l.rate,rs(l.tv),rs(l.cgst),rs(l.sgst),rs(l.igst)]))],
+ 'Customer outstanding':[['Customer','Invoiced','Paid','Outstanding'],Object.keys(S.cust).map(c=>[S.cust[c].n,rs(inv.filter(v=>v.cust==c).reduce((a,v)=>a+v.total,0)),rs(S.payments.filter(p=>p.cust==c).reduce((a,p)=>a+p.amt,0)),rs(outstanding(c))])],
+ 'Purchase register':[['Ref','Date','Supplier','Item','Qty','Rate'],S.purchases.map(p=>[p.id,p.ts,p.sup,S.items[p.item].n,dq(p.item,p.q),rs(p.rate)])],
+ 'Stock summary':[['Item','Balance','Unit','Value'],Object.keys(S.items).map(i=>[S.items[i].n,dq(i,bal(i)),S.items[i].u,rs(S.items[i].val)])],
+ 'Stock ledger':[['#','Time','Item','Qty','Value','Source','Ref'],S.ledger.map(l=>[l.n,l.ts,S.items[l.item].n,dq(l.item,l.q),rs(l.v),l.src,l.ref])],
+ 'Production variance':[['Run','Item','Planned','Actual','Var %','Flag'],S.runs.flatMap(r=>varRows(r).map(x=>[r.id,x.n,x.std,x.act,x.p.toFixed(1),flag(x.p)?'FLAG':'']))],
+ 'Cost per packet':[['Run','Materials','Labour','Power','Good pkts','Cost/pkt'],S.runs.map(r=>[r.id,rs(r.mat),rs(r.lab),rs(r.pow),r.good,rs(cpp(r))])],
+ 'Audit log':[['Time','User','Action'],S.audit.map(a=>[a.t,a.u,a.m])]}}
+function showInv(no){const v=S.invoices.find(x=>x.no==no),c=S.cust[v.cust];
+ $('inv').innerHTML=`<h2>TAX INVOICE</h2><p><b>${SELLER.name}</b>, ${SELLER.state} · GSTIN ${SELLER.gstin}</p><p>No: ${v.no} · Date: ${v.ts}<br>To: ${c.n}, ${c.st} · GSTIN ${c.gstin}<br>Place of supply: ${c.st}</p>`+
+ table(['Item','HSN','#Qty','#Rate','#Taxable','GST %'],v.lines.map(l=>[S.items[l.p].n,l.hsn,l.q,rs(l.price),rs(l.tv),l.rate]))+
+ `<p>Taxable ${rs(v.tv)}<br>${v.igst?'IGST '+rs(v.igst):'CGST '+rs(v.cgst)+'<br>SGST '+rs(v.sgst)}<br><b>Total ${rs(v.total)}</b></p><button onclick="$('inv').style.display='none'">Close</button>`;
+ $('inv').style.display='block';setTimeout(()=>window.print(),100);}
+function login(u){me=u;page=PAGES[USERS[u][1]][0];render()}
+function render(){$('usr').innerHTML=Object.keys(USERS).map(u=>`<option value="${u}" ${u==me?'selected':''}>${USERS[u][0]}</option>`).join('');
+ const ps=PAGES[USERS[me][1]];if(!ps.includes(page))page=ps[0];
+ $('nav').innerHTML=ps.map(p=>`<button class="${p==page?'':'alt'}" onclick="page='${p}';render()">${LABEL[p]}</button>`).join('');
+ $('main').innerHTML=V[page]()}
+// ----- interactive layer -----
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function toast(m,k){const t=document.createElement('div');t.className='toast '+(k||'');t.textContent=m;$('toast').appendChild(t);setTimeout(()=>t.classList.add('out'),2600);setTimeout(()=>t.remove(),3100)}
+function burst(){for(let i=0;i<28;i++){const e=document.createElement('i');e.className='cf';e.textContent=['🎉','✨','🟡','🟢','🟣'][i%5];e.style.left=(30+Math.random()*40)+'vw';e.style.setProperty('--dx',(Math.random()*300-150)+'px');e.style.animationDelay=(Math.random()*.2)+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),1700)}}
+function rmLine(i){cart.splice(i,1);render()}
+function countUps(){document.querySelectorAll('.kpi b').forEach(b=>{const m=b.textContent.match(/^([^\d-]*)([\d,]+(?:\.\d+)?)(.*)$/);if(!m)return;const to=parseFloat(m[2].replace(/,/g,'')),dec=(m[2].split('.')[1]||'').length;let s0=null;const f=t=>{s0=s0||t;const p=Math.min((t-s0)/700,1);b.textContent=m[1]+(to*p).toLocaleString('en-IN',{minimumFractionDigits:dec,maximumFractionDigits:dec})+m[3];if(p<1)requestAnimationFrame(f)};requestAnimationFrame(f)})}
+function gauges(){const C={Raw:'#f59e0b',Packaging:'#8b5cf6',FG:'#10b981'};return '<div class="card"><b>Live stock levels</b>'+Object.keys(S.items).map(i=>{const tin=S.ledger.filter(l=>l.item==i&&l.q>0).reduce((a,l)=>a+l.q,0),b=bal(i),w=Math.max(2,Math.min(100,b/Math.max(tin,1)*100));return `<div class="g"><span>${S.items[i].n}</span><div class="gb"><div style="width:${w}%;background:${C[S.items[i].t]}"></div></div><span class="n">${dq(i,b)} ${S.items[i].u}</span></div>`}).join('')+'</div>'}
+function flow(){const c=(a,n,k)=>`<div class="fc ${k}"><b>${n}</b><span>${a}</span></div>`,ar='<span class="ar">➜</span>',fl=S.runs.reduce((a,r)=>a+varRows(r).filter(x=>flag(x.p)).length,0);
+ return '<div class="card"><b>Sales loop</b><div class="flow">'+c('Orders',S.orders.length,'c1')+ar+c('Invoices',S.invoices.length,'c2')+ar+c('Dispatched',S.invoices.filter(v=>v.disp).length,'c3')+ar+c('FG packets',dq('murukku',bal('murukku')),'c4')+'</div><b>Production loop</b><div class="flow">'+c('Purchases',S.purchases.length,'c5')+ar+c('Runs',S.runs.length,'c6')+ar+c('Variance flags',fl,'c7')+ar+c('FG packets',dq('murukku',bal('murukku')),'c4')+'</div></div>'}
+const _st=V.stock;V.stock=()=>gauges()+_st();const _d=V.dash;V.dash=()=>flow()+_d();
+const STEPS=['Buy flour','Production run','Order A','Approve+invoice+dispatch','Order B (short)','Payment','Overheads & cost','Reports'];let playing=false;
+function mark(i){$('steps').innerHTML=STEPS.map((s,j)=>`<span class="st ${j<i?'done':j==i?'now':''}">${j+1}. ${s}</span>`).join('');$('steps').style.display='flex'}
+const as=(u,p)=>{me=u;page=p;render()};
+async function play(){if(playing)return;playing=true;seed();
+ mark(0);as('prod','purchase');await sleep(900);$('pi').value='flour';$('pq').value=60;$('pr').value=45;await sleep(900);buy();await sleep(1500);
+ mark(1);as('prod','run');await sleep(900);$('r_oil').value=10.5;await sleep(900);runProd();await sleep(2000);
+ mark(2);as('salA','order');await sleep(700);$('oc').value='A';$('oq').value=150;await sleep(700);addLine();await sleep(700);submitOrder();await sleep(1500);
+ mark(3);as('admin','orders');await sleep(1200);approve('ORD-1');await sleep(1000);invoice('ORD-1');await sleep(1000);as('admin','invoices');await sleep(1000);dispatch(S.invoices[0].no);await sleep(2000);
+ mark(4);as('salB','order');await sleep(700);$('oc').value='B';$('oq').value=120;await sleep(500);addLine();await sleep(500);submitOrder();await sleep(1000);as('admin','orders');toast('Shortage flagged: 32 packets','bad');await sleep(3000);
+ mark(5);as('admin','invoices');await sleep(900);$('pa'+S.invoices[0].no.replace(/\W/g,'')).value=4000;await sleep(800);pay(S.invoices[0].no);await sleep(2000);
+ mark(6);as('prod','run');await sleep(900);$('labRUN-1').value=1200;$('powRUN-1').value=600;await sleep(800);ovh('RUN-1');await sleep(2400);
+ mark(7);as('acct','reports');await sleep(1500);toast('Benchmark complete 🎉','good');burst();playing=false}
+const _rr=render;render=function(){_rr();countUps()};
+try{S=JSON.parse(localStorage.getItem('o2a'))}catch(e){}
+if(!S)seed();login('admin');
+</script></body></html>
